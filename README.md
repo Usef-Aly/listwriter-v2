@@ -27,15 +27,7 @@
 - Mobile-first responsive
 - Lighthouse 100%
 
-## 📱 Live Demo
-`http://localhost:3000` (npx serve .)
 
-## 🚀 Deploy
-```
-1. Drag to netlify.com/drop
-2. npx vercel
-3. GitHub Pages
-```
 
 ## 🛠 Tech
 ```
