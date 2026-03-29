@@ -1,4 +1,4 @@
-# ListWriter - Ultimate Checklist PWA
+# ListWriter - Ultimate Checklist PWA - developed with AI
 <img width="1453" height="720" alt="ListWriter-V2" src="https://github.com/user-attachments/assets/38c6f17c-1853-4527-9486-c29aa6f47ac9" />
 
 ## 🚀 Features (All Implemented)
