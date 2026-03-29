@@ -46,24 +46,14 @@ function showApp() {
 }
 
 /* STORAGE */
-function getKey() {
-  return currentUser + "_tasks";
-}
-
+function getKey() { return currentUser + "_tasks"; }
 function loadTasks() {
-  try {
-    tasks = JSON.parse(localStorage.getItem(getKey())) || [];
-  } catch {
-    tasks = [];
-  }
+  try { tasks = JSON.parse(localStorage.getItem(getKey())) || []; } 
+  catch { tasks = []; }
 }
-
 function saveTasks() {
-  try {
-    localStorage.setItem(getKey(), JSON.stringify(tasks));
-  } catch {
-    alert("Storage full. Clear some tasks.");
-  }
+  try { localStorage.setItem(getKey(), JSON.stringify(tasks)); } 
+  catch { alert("Storage full. Clear some tasks."); }
 }
 
 /* ADD */
@@ -103,6 +93,7 @@ function startEdit(span, id) {
     saveTasks();
     renderTasks();
   });
+
   input.addEventListener("keypress", e => { if (e.key === "Enter") input.blur(); });
 }
 
@@ -148,7 +139,6 @@ function renderTasks() {
     return;
   }
 
-  // SORT: priority → date → completed
   const priorityMap = { High: 3, Medium: 2, Low: 1 };
   filtered.sort((a,b) => {
     if(a.completed !== b.completed) return a.completed ? 1 : -1;
@@ -217,9 +207,7 @@ function handleSwipe(e) {
 }
 
 /* DARK MODE */
-function toggleDarkMode() {
-  document.body.classList.toggle("dark");
-}
+function toggleDarkMode() { document.body.classList.toggle("dark"); }
 
 /* REMINDERS */
 setInterval(() => {
