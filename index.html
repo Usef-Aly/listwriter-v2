@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Listwriter App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container py-4">
+
+  <!-- LOGO -->
+  <div class="text-center mb-4">
+    <img src="logo.png" alt="Listwriter Logo" id="logo" width="100">
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginSection" class="card p-4 text-center">
+    <h2>Welcome</h2>
+    <input type="text" id="usernameInput" class="form-control my-3" placeholder="Enter your name" aria-label="Username">
+    <button class="btn btn-dark w-100" onclick="login()">Login</button>
+  </div>
+
+  <!-- APP -->
+  <div id="appSection" class="d-none">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+      <h3 class="fw-bold">Listwriter</h3>
+      <div class="d-flex gap-2 align-items-center flex-wrap">
+          <span id="userDisplay"></span>
+        <button class="btn btn-sm btn-outline-dark" onclick="toggleDarkMode()" aria-label="Toggle Dark Mode">🌙</button>
+        <button class="btn btn-sm btn-outline-danger" onclick="logout()" aria-label="Logout">Logout</button>
+      </div>
+    </div>
+
+    <!-- COUNTER -->
+    <div class="mb-2 text-muted" id="taskCounter" aria-live="polite"></div>
+
+    <!-- SEARCH + FILTER -->
+    <div class="d-flex gap-2 mb-3 flex-wrap">
+      <input type="text" id="searchInput" class="form-control w-auto" placeholder="Search tasks..." oninput="renderTasks()" aria-label="Search tasks">
+      <div class="d-flex gap-1 flex-wrap" id="filters">
+        <button class="btn btn-light active" onclick="setFilter('All', this)">All</button>
+        <button class="btn btn-light" onclick="setFilter('To Do', this)">To Do</button>
+        <button class="btn btn-light" onclick="setFilter('To Buy', this)">To Buy</button>
+        <button class="btn btn-light" onclick="setFilter('Personal', this)">Personal</button>
+        <button class="btn btn-light" onclick="setFilter('Work', this)">Work</button>
+      </div>
+    </div>
+
+    <!-- ADD TASK -->
+    <div class="d-flex gap-2 mb-4 flex-wrap align-items-center">
+      <input type="text" id="taskInput" class="form-control" placeholder="Add task..." aria-label="Task text">
+      <select id="taskCategory" class="form-select w-auto" aria-label="Task category">
+        <option>To Do</option>
+        <option>To Buy</option>
+        <option>Personal</option>
+        <option>Work</option>
+      </select>
+      <select id="taskPriority" class="form-select w-auto" aria-label="Task priority">
+        <option value="Low">Low</option>
+        <option value="Med" selected>Medium</option>
+        <option value="High">High</option>
+      </select>
+      <input type="date" id="taskDate" class="form-control w-auto" aria-label="Due date">
+      <button class="btn btn-dark" onclick="addTask()">Add</button>
+    </div>
+
+    <!-- TASK LIST -->
+    <ul id="taskList" class="list-group" aria-label="Task list"></ul>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
