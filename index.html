@@ -2,84 +2,161 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Listwriter App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ListWriter</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="logo.png" sizes="32x32">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#667eea">
 </head>
-<body>
+<body data-theme="light">
+  <div class="app-container">
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="theme-toggle" title="Toggle theme (T)">🌙</button>
 
-<div class="container py-4">
+    <!-- Header -->
+    <header class="header">
+      <img src="logo.png" alt="ListWriter Logo" class="logo">
+      <h1>ListWriter</h1>
+      <div class="header-controls">
+        <label class="file-input-wrapper" title="Import JSON (I)">
+          <input type="file" id="importBtn" accept=".json">
+          📥
+        </label>
+        <button id="exportBtn" title="Export JSON (E)">📤</button>
+        <button id="printBtn" title="Print (P)">🖨️</button>
+        <button id="clearUndoBtn" title="Clear Undo (U)">↺</button>
+      </div>
+    </header>
 
-  <!-- LOGO -->
-  <div class="text-center mb-4">
-    <img src="logo.png" alt="Listwriter Logo" id="logo" width="100">
-  </div>
-
-  <!-- LOGIN -->
-  <div id="loginSection" class="card p-4 text-center">
-    <h2>Welcome</h2>
-    <input type="text" id="usernameInput" class="form-control my-3" placeholder="Enter your name" aria-label="Username">
-    <button class="btn btn-dark w-100" onclick="login()">Login</button>
-  </div>
-
-  <!-- APP -->
-  <div id="appSection" class="d-none">
-
-    <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-      <h3 class="fw-bold">Listwriter</h3>
-      <div class="d-flex gap-2 align-items-center flex-wrap">
-          <span id="userDisplay"></span>
-        <button class="btn btn-sm btn-outline-dark" onclick="toggleDarkMode()" aria-label="Toggle Dark Mode">🌙</button>
-        <button class="btn btn-sm btn-outline-danger" onclick="logout()" aria-label="Logout">Logout</button>
+    <!-- Stats Dashboard -->
+    <div class="stats-grid">
+      <div class="stat">
+        <span id="totalCount">0</span>
+        <small>All Tasks</small>
+      </div>
+      <div class="stat">
+        <span id="completeCount">0</span>
+        <small>Complete</small>
+      </div>
+      <div class="stat">
+        <span id="priorityHigh">0</span>
+        <small>High Priority</small>
+      </div>
+      <div class="stat">
+        <span id="dueToday">0</span>
+        <small>Due Today</small>
+      </div>
+      <div class="stat">
+        <span id="overdue">0</span>
+        <small>Overdue</small>
       </div>
     </div>
 
-    <!-- COUNTER -->
-    <div class="mb-2 text-muted" id="taskCounter" aria-live="polite"></div>
-
-    <!-- SEARCH + FILTER -->
-    <div class="d-flex gap-2 mb-3 flex-wrap">
-      <input type="text" id="searchInput" class="form-control w-auto" placeholder="Search tasks..." oninput="renderTasks()" aria-label="Search tasks">
-      <div class="d-flex gap-1 flex-wrap" id="filters">
-        <button class="btn btn-light active" onclick="setFilter('All', this)">All</button>
-        <button class="btn btn-light" onclick="setFilter('To Do', this)">To Do</button>
-        <button class="btn btn-light" onclick="setFilter('To Buy', this)">To Buy</button>
-        <button class="btn btn-light" onclick="setFilter('Personal', this)">Personal</button>
-        <button class="btn btn-light" onclick="setFilter('Work', this)">Work</button>
-        <button class="btn btn-light" onclick="setFilter('High', this)">High Priority</button>
-        <button class="btn btn-light" onclick="setFilter('Medium', this)">Medium Priority</button>
-        <button class="btn btn-light" onclick="setFilter('Low', this)">Low Priority</button>
+    <!-- Search & Filters -->
+    <div class="controls-section">
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="🔍 Search tasks..." maxlength="100">
+      </div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all" title="All tasks">All</button>
+        <button class="filter-btn" data-filter="todo" title="Todo category">Todo</button>
+        <button class="filter-btn" data-filter="buy" title="To Buy">Buy</button>
+        <button class="filter-btn" data-filter="personal" title="Personal">Personal</button>
+        <button class="filter-btn" data-filter="work" title="Work">Work</button>
+        <button class="filter-btn" data-priority="high" title="High priority">🔴 High</button>
+        <button class="filter-btn" data-priority="medium" title="Medium priority">🟡 Medium</button>
+        <button class="filter-btn" data-priority="low" title="Low priority">🟢 Low</button>
+        <button class="filter-btn" data-due="today" title="Due today">📅 Today</button>
+        <button class="filter-btn" data-due="overdue" title="Overdue">⚠️ Overdue</button>
       </div>
     </div>
 
-    <!-- ADD TASK -->
-    <div class="d-flex gap-2 mb-4 flex-wrap align-items-center">
-      <input type="text" id="taskInput" class="form-control" placeholder="Add task..." aria-label="Task text">
-      <select id="taskCategory" class="form-select w-auto" aria-label="Task category">
-        <option>To Do</option>
-        <option>To Buy</option>
-        <option>Personal</option>
-        <option>Work</option>
-      </select>
-      <select id="taskPriority" class="form-select w-auto" aria-label="Task priority">
-        <option value="Low">Low</option>
-        <option value="Medium" selected>Medium</option>
-        <option value="High">High</option>
-      </select>
-      <input type="date" id="taskDate" class="form-control w-auto" aria-label="Due date">
-      <button class="btn btn-dark" onclick="addTask()">Add</button>
+    <!-- Bulk Actions -->
+    <div class="bulk-controls hidden" id="bulkControls">
+      <span id="bulkSelection" class="selection-info">0 selected</span>
+      <button id="bulkCompleteAll" title="Complete selected (C)">✅ Complete</button>
+      <button id="bulkDeleteAll" title="Delete selected (D)">🗑️ Delete</button>
+      <button id="bulkClearSelection" title="Clear selection (Escape)">Clear</button>
     </div>
 
-    <!-- TASK LIST -->
-    <ul id="taskList" class="list-group" aria-label="Task list"></ul>
+    <!-- Task Input Form -->
+    <form class="task-form" id="taskForm">
+      <div class="input-row">
+        <input type="text" id="taskText" placeholder="What needs to be done?" required maxlength="250">
+        <select id="taskCategory">
+          <option value="todo">📋 Todo</option>
+          <option value="buy">🛒 To Buy</option>
+          <option value="personal">❤️ Personal</option>
+          <option value="work">💼 Work</option>
+        </select>
+        <select id="taskPriority">
+          <option value="low">🟢 Low</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="high">🔴 High</option>
+        </select>
+      </div>
+      <div class="input-row">
+        <input type="date" id="taskDueDate">
+        <select id="taskRecurrence">
+          <option value="none">Once</option>
+          <option value="daily">🔄 Daily</option>
+          <option value="weekly">📅 Weekly</option>
+        </select>
+        <button type="button" id="bulkSelectBtn" title="Bulk select (B)">☰ Bulk</button>
+      </div>
+      <div class="notes-row">
+        <textarea id="taskNotes" placeholder="Optional notes..." maxlength="1000" rows="2"></textarea>
+        <label class="file-input-wrapper">
+          <input type="file" id="taskFile" accept="image/*,.pdf,.txt">
+          📎 Attach
+        </label>
+      </div>
+      <button type="submit" id="addTaskBtn">➕ Add Task</button>
+    </form>
 
+    <!-- Undo Notification -->
+    <div id="undoNotification" class="notification hidden">
+      <span>Task moved to trash</span>
+      <button id="undoLastAction">Undo</button>
+      <button id="dismissUndo">Dismiss</button>
+    </div>
+
+    <!-- Task List -->
+    <main class="task-list-section">
+      <ul id="taskList" aria-label="Task list" role="list"></ul>
+      
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-illustration">📝</div>
+        <h2>No matching tasks</h2>
+        <p>Try adjusting your filters or add a new task above.</p>
+        <button id="clearAllFilters" class="btn-secondary">Clear All Filters</button>
+      </div>
+    </main>
+
+    <!-- Help Modal -->
+    <dialog id="helpDialog" class="help-modal">
+      <div class="help-content">
+        <h3>Keyboard Shortcuts</h3>
+        <ul>
+          <li>Ctrl+Enter → Add task</li>
+          <li>Delete → Delete focused</li>
+          <li>Ctrl+B → Bulk mode</li>
+          <li>T → Toggle theme</li>
+          <li>Ctrl+P → Print</li>
+          <li>N → Toggle notes</li>
+          <li>/ → Focus search</li>
+          <li>Esc → Clear selection</li>
+        </ul>
+        <button id="closeHelp">Got it!</button>
+      </dialog>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Made by Usef Aly</p>
+    </footer>
   </div>
 
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
